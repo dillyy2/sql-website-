@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MySQL Query Runner</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            text-align: center;
+            background: linear-gradient(to right, #ff9a9e, #fad0c4);
+            color: #333;
+            margin: 0;
+            padding: 20px;
+        }
+
+        h1 {
+            font-size: 3rem;
+            color: #fff;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+        }
+
+        button {
+            padding: 15px 30px;
+            margin: 20px 10px;
+            border: none;
+            border-radius: 50px;
+            background: linear-gradient(to right, #6a11cb, #2575fc);
+            color: white;
+            font-size: 1.2rem;
+            cursor: pointer;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+            transition: all 0.3s ease;
+        }
+
+        button:hover {
+            background: linear-gradient(to right, #2575fc, #6a11cb);
+            transform: scale(1.1);
+        }
+
+        #output {
+            margin: 30px auto;
+            padding: 20px;
+            background: #fff;
+            border-radius: 10px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+            width: 80%;
+            max-width: 800px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th, td {
+            padding: 15px;
+            border: 1px solid #ddd;
+            font-size: 1rem;
+        }
+
+        th {
+            background: linear-gradient(to right, #43cea2, #185a9d);
+            color: white;
+            text-transform: uppercase;
+        }
+
+        tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+
+        tr:hover {
+            background-color: #d1e7ff;
+            transition: background-color 0.3s ease;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>🎉 Run SQL Queries 🎉</h1>
+
+<button onclick="fetchResults('query1.php?query=1')">Movies on One Platform</button>
+<button onclick="fetchResults('query1.php?query=2')">Newest PG Movies on Disney+</button>
+<button onclick="fetchResults('query1.php?query=3')">Average Rotten Tomatoes Scores</button>
+<button onclick="fetchResults('query1.php?query=4')">Movies by Age Rating</button>
+<button onclick="fetchResults('query1.php?query=5')">Movies per Streaming Platform</button>
+<button onclick="fetchResults('query1.php?query=6')">Highest Rated Movies by Year</button>
+<button onclick="fetchResults('query1.php?query=7')">Highest & Lowest Rated Movies by Age Group</button>
+<button onclick="fetchResults('query1.php?query=8')">Percentage of Movies on Each Platform</button>
+<button onclick="fetchResults('query1.php?query=9')">Top Rated Movies by Platform</button>
+<button onclick="fetchResults('query1.php?query=10')">Movies Count by Platform and Age Group</button>
+        
+<div id="output">Results will appear here...</div>
+
+    <script>
+        function fetchResults(queryFile) {
+            fetch(queryFile)
+                .then(response => response.json())
+                .then(data => {
+                    let output = "<table><tr>";
+                    
+                    if (data.length > 0) {
+                        Object.keys(data[0]).forEach(key => {
+                            output += `<th>${key}</th>`;
+                        });
+                        output += "</tr>";
+
+                        data.forEach(row => {
+                            output += "<tr>";
+                            Object.values(row).forEach(value => {
+                                output += `<td>${value}</td>`;
+                            });
+                            output += "</tr>";
+                        });
+                        output += "</table>";
+                    } else {
+                        output = "<p>No results found.</p>";
+                    }
+
+                    document.getElementById('output').innerHTML = output;
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    document.getElementById('output').innerHTML = `<p style='color:red;'>Error fetching data: ${error}</p>`;
+                });
+        }
+    </script>
+
+</body>
+</html>
